@@ -1,4 +1,4 @@
-    console.log("whatever");
+//Accounts Data ------------------------
     var accounts = [
         {
             accountName: 'Checking Account',
@@ -37,6 +37,25 @@
 
     var total = accounts.sum();
 
+    // Table Object----------------------------------
+
+    function Table(){
+        var self = this;
+
+        this.contents = "";
+
+        this.addRow = function(){
+            row = "";
+            row += td(arguments[0]) + td(arguments[1]) + td(arguments[2]);
+            self.contents +=  tr(row);
+        };
+
+    }
+
+
+
+    //
+
     function wrap(content,tag){
         return "<" + tag + ">" + content + "</" + tag + ">";
     }
@@ -52,25 +71,18 @@
     var strong = makewrapper("strong");
     var table = makewrapper("table");
 
-    function row(){
-        r = "";
-        r += td(arguments[0]) + td(arguments[1]) + td(arguments[2]);
-        return tr(r);
-    }
-
+//---------
   
-    var html = '';
+    var table1 = new Table();
 
-    html += row("Name","Amount","Status");
-
+    table1.addRow("Name","Amount","Status");
 
     for (var i = 0; i < accounts.length; i++) {
-        html += row(accounts[i].accountName,accounts[i].amount,accounts[i].status);
+        table1.addRow(accounts[i].accountName,accounts[i].amount,accounts[i].status);
     }
 
-    html += row(strong("Total"),strong(total),"");
+    table1.addRow(strong("Total"),strong(total),"");
 
-    var content = table(html);
+    var html = table(table1.contents);
 
-
-    document.querySelector('.container').innerHTML = content;
+    document.querySelector('.container').innerHTML = html;
