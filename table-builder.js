@@ -46,8 +46,8 @@
 
         this.addRow = function(){
             row = "";
-            row += td(arguments[0]) + td(arguments[1]) + td(arguments[2]);
-            self.contents +=  tr(row);
+            row += wrap(arguments[0],"td") + wrap(arguments[1],"td") + wrap(arguments[2],"td");
+            self.contents +=  wrap(row,"tr");
         };
 
     }
@@ -60,17 +60,6 @@
         return "<" + tag + ">" + content + "</" + tag + ">";
     }
 
-    function makewrapper(tag){
-     return function(content){
-        return wrap(content,tag);
-     };
-    }
-
-    var td = makewrapper("td");
-    var tr = makewrapper("tr");
-    var strong = makewrapper("strong");
-    var table = makewrapper("table");
-
 //---------
   
     var table1 = new Table();
@@ -81,8 +70,8 @@
         table1.addRow(accounts[i].accountName,accounts[i].amount,accounts[i].status);
     }
 
-    table1.addRow(strong("Total"),strong(total),"");
+    table1.addRow(wrap("Total","strong"),wrap(total,"strong"),"");
 
-    var html = table(table1.contents);
+    var html = wrap(table1.contents,"table");
 
     document.querySelector('.container').innerHTML = html;
