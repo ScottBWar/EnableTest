@@ -27,6 +27,16 @@
         }
     ];
 
+    accounts.sum = function(){
+         var sum = 0;
+        for(var i = 0; i < this.length; i++){
+           sum += this[i].amount;
+        }
+        return sum;
+    };
+
+    var total = accounts.sum();
+
     function wrap(content,tag){
         return "<" + tag + ">" + content + "</" + tag + ">";
     }
@@ -39,6 +49,8 @@
 
     var td = makewrapper("td");
     var tr = makewrapper("tr");
+    var strong = makewrapper("strong");
+    var table = makewrapper("table");
 
     function row(){
         r = "";
@@ -47,28 +59,18 @@
     }
 
   
-    var html = '<table>';
+    var html = '';
 
-    html += '<tr><td>Name</td><td>Amount</td><td>Status</td></tr>';
+    html += row("Name","Amount","Status");
 
-    var total = 0;
+
     for (var i = 0; i < accounts.length; i++) {
-
-        html += '<tr>';
-
-        
-        html +=  td(accounts[i].accountName);
-        html +=  td(accounts[i].amount);
-        html +=  td(accounts[i].status);
-
-        html += '</tr>';
-
-        total += accounts[i].amount;
+        html += row(accounts[i].accountName,accounts[i].amount,accounts[i].status);
     }
 
-    html += '<tr><td><strong>Total</strong></td>' + '<td><strong>' + total + '</strong></td>' + '<td></td></tr>';
+    html += row(strong("Total"),strong(total),"");
 
-    html += '</table>';
+    var content = table(html);
 
 
-    document.querySelector('.container').innerHTML = html;
+    document.querySelector('.container').innerHTML = content;
