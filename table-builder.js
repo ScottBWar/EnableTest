@@ -1,77 +1,77 @@
 //Accounts Data ------------------------
-    var accounts = [
-        {
-            accountName: 'Checking Account',
-            amount: 15010,
-            status: 'active'
-        },
-        {
-            accountName: 'Savings Account',
-            amount: 55020,
-            status: 'active'
-        },
-        {
-            accountName: 'Travel Fund Account',
-            amount: 25030,
-            status: 'inactive'
-        },
-        {
-            accountName: 'Investment Account',
-            amount: 1500500,
-            status: 'active'
-        },
-        {
-            accountName: 'Education Account',
-            amount: 14500,
-            status: 'active'
-        }
-    ];
+var accounts = [{
+    accountName: 'Checking Account',
+    amount: 15010,
+    status: 'active'
+}, {
+    accountName: 'Savings Account',
+    amount: 55020,
+    status: 'active'
+}, {
+    accountName: 'Travel Fund Account',
+    amount: 25030,
+    status: 'inactive'
+}, {
+    accountName: 'Investment Account',
+    amount: 1500500,
+    status: 'active'
+}, {
+    accountName: 'Education Account',
+    amount: 14500,
+    status: 'active'
+}];
 
-    accounts.sum = function(){
-         var sum = 0;
-        for(var i = 0; i < this.length; i++){
-           sum += this[i].amount;
+function wrap(content, tag) {
+    return "<" + tag + ">" + content + "</" + tag + ">";
+}
+// Table Object----------------------------------
+
+function Table(headers,data) {
+    var self = this;
+
+    this.contents = "";
+
+    this.addRow = function(array) {
+        var row = "";
+        for (var i in array) {
+            row += wrap(array[i], "td");
         }
-        return sum;
+        self.contents += wrap(row, "tr");
     };
 
-    var total = accounts.sum();
+    this.addData = function() {
+        console.log(self);
+        console.log(data);
+        for (var i = 0; i < data.length; i++) {
+            var row = [];
+            for (var k in Object.keys(data[i])) {
+                row.push(data[i][Object.keys(data[i])[k]]);
+            }
+            self.addRow(row);
+        }
 
-    // Table Object----------------------------------
+    };
 
-    function Table(){
-        var self = this;
+    this.addTotals = function() {
+        var total = 0;
+        for (var i = 0; i < data.length; i++) {
+            total += data[i].amount;
+        }
+        self.addRow([wrap("Total", "strong"), wrap(total, "strong"), ""]);
+    };
 
-        this.contents = "";
+    this.toHtml = function(){
+        var html = wrap(self.contents, "table");
+        return html;
+    };
 
-        this.addRow = function(){
-            row = "";
-            row += wrap(arguments[0],"td") + wrap(arguments[1],"td") + wrap(arguments[2],"td");
-            self.contents +=  wrap(row,"tr");
-        };
-
-    }
-
-
-
-    //
-
-    function wrap(content,tag){
-        return "<" + tag + ">" + content + "</" + tag + ">";
-    }
+    self.addRow(headers),self.addData(),self.addTotals();
+}
+//
 
 //---------
-  
-    var table1 = new Table();
 
-    table1.addRow("Name","Amount","Status");
+var table1 = new Table(["Name", "Amount", "Status"],accounts);
 
-    for (var i = 0; i < accounts.length; i++) {
-        table1.addRow(accounts[i].accountName,accounts[i].amount,accounts[i].status);
-    }
 
-    table1.addRow(wrap("Total","strong"),wrap(total,"strong"),"");
-
-    var html = wrap(table1.contents,"table");
-
-    document.querySelector('.container').innerHTML = html;
+document.querySelector('.container').innerHTML = table1.toHtml();
